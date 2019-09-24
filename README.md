@@ -7,4 +7,6 @@ _NOTE_ this is very much a WIP, done as I was going through the labs. Hardcoded 
 1. Download the service account json file, saving it to `~/.config/gcloud/***.json`
 1. `export GOOGLE_APPLICATION_CREDENTIALS=~/.config/gcloud/***.json`
 1. Add your project name to your ENV `export GOOGLE_PROJECT=<project>`
+1. Change directory into the directory for the module you're working on
+1. Symlink the provider.tf `ln -s ../provider.tf provider.tf`
 1. ```terraform init && terraform plan```
