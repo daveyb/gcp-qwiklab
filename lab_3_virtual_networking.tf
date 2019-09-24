@@ -1,7 +1,3 @@
-data "google_compute_network" "default" {
-  name = "default"
-}
-
 resource "google_compute_network" "auto_mode" {
   name        = "learnauto"
   description = "Learn about auto-mode networks"
@@ -26,6 +22,11 @@ resource "google_compute_subnetwork" "1" {
     range_name    = "subnet-1b"
     ip_cidr_range = "192.168.3.0/24"
   }
+}
+
+data "google_compute_subnetwork" "1" {
+  name   = "${google_compute_subnetwork.1.name}"
+  region = "us-central1"
 }
 
 resource "google_compute_subnetwork" "2" {
@@ -82,7 +83,7 @@ resource "google_compute_instance" "learn-3" {
 
   network_interface {
     network    = "${google_compute_network.custom_mode.name}"
-    subnetwork = "${google_compute_subnetwork.1.network}"
+    subnetwork = "${google_compute_subnetwork.1.name}"
   }
 }
 
@@ -99,7 +100,7 @@ resource "google_compute_instance" "learn-4" {
 
   network_interface {
     network    = "${google_compute_network.custom_mode.name}"
-    subnetwork = "${google_compute_subnetwork.1.secondary_ip_range.range_name}"
+    subnetwork = "${data.google_compute_subnetwork.1.secondary_ip_range.range_name}"
   }
 }
 
@@ -116,6 +117,6 @@ resource "google_compute_instance" "learn-5" {
 
   network_interface {
     network    = "${google_compute_network.custom_mode.name}"
-    subnetwork = "${google_compute_subnetwork.2.network}"
+    subnetwork = "${google_compute_subnetwork.2.name}"
   }
 }
