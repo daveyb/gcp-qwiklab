@@ -20,7 +20,7 @@ resource "google_compute_instance" "windows" {
   machine_type = "n1-standard-2"
   zone         = "europe-west2-a"
 
-  tags = ["allow-web"]
+  tags = ["http-server", "https-server"]
 
   boot_disk {
     initialize_params {
@@ -34,18 +34,6 @@ resource "google_compute_instance" "windows" {
     network    = "default"
     subnetwork = "default"
   }
-}
-
-resource "google_compute_firewall" "default" {
-  name    = "allow-http-https-rdp"
-  network = "default"
-
-  allow {
-    protocol = "tcp"
-    ports    = ["80", "443"]
-  }
-
-  target_tags = ["allow-web"]
 }
 
 resource "google_compute_instance" "custom" {
