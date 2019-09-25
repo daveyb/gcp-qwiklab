@@ -1,3 +1,7 @@
+variable "mysql_password" {
+  type = "string"
+}
+
 resource "google_compute_instance" "mydb-client" {
   name         = "mydb-client"
   machine_type = "n1-standard-1"
@@ -25,7 +29,7 @@ data "null_data_source" "auth_netw_mysql_allowed_1" {
   }
 }
 
-resource "google_sql_database_instance" "infra-db" {
+resource "google_sql_database_instance" "infra_db" {
   name = "infra-db"
   database_version = "MYSQL_5_7"
   region = "us-central1"
@@ -45,6 +49,21 @@ resource "google_sql_database_instance" "infra-db" {
   }
 }
 
-output "mydb_external_ip" {
+resource "google_sql_user" "users" {
+  name     = "root"
+  instance = "${google_sql_database_instance.infra_db.name}"
+  password = "${var.mysql_password}"
+}
+
+output "mydb_client_external_ip" {
   value = "${google_compute_instance.mydb-client.network_interface.0.access_config.0.nat_ip}"
+}
+
+output "infra_db_external_ip" {
+  value = "${google_sql_database_instance.infra_db.public_ip_address}"
+}
+
+output "mysql_password" {
+  value = "${var.mysql_password}"
+  sensitive = true
 }
