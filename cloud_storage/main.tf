@@ -14,7 +14,7 @@ resource "google_storage_bucket" "bucket_1" {
   location = "us"
 }
 
-resource "google_storage_bucket_acl" "bucket_1_acl" {
+resource "google_storage_bucket_acl" "bucket_1" {
   bucket = "${google_storage_bucket.bucket_1.name}"
   predefined_acl = "projectPrivate"
 }
