@@ -1,9 +1,9 @@
 variable "bucket_1_name" {
-  type = "string"
+  type    = "string"
   default = "bucket-1"
 }
 
-resource "random_uuid" "storage" { 
+resource "random_uuid" "storage" {
   keepers {
     bucket_name = "${var.bucket_1_name}"
   }
@@ -15,6 +15,6 @@ resource "google_storage_bucket" "bucket_1" {
 }
 
 resource "google_storage_bucket_acl" "bucket_1" {
-  bucket = "${google_storage_bucket.bucket_1.name}"
+  bucket         = "${google_storage_bucket.bucket_1.name}"
   predefined_acl = "projectPrivate"
 }

@@ -21,12 +21,12 @@ resource "google_bigquery_table" "sampleinfo" {
     source_format = "CSV"
 
     csv_options {
-      quote = ""
+      quote             = ""
       skip_leading_rows = 1
     }
 
     source_uris = [
-      "gs://cloud-training/archinfra/export-billing-example.csv"
+      "gs://cloud-training/archinfra/export-billing-example.csv",
     ]
   }
 }

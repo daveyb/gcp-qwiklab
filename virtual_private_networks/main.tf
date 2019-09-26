@@ -27,15 +27,15 @@ data "google_compute_network" "network2" {
 }
 
 resource "google_compute_address" "vpn1" {
-  name = "vpn-1-static-ip"
+  name         = "vpn-1-static-ip"
   address_type = "EXTERNAL"
-  region = "${local.vpn-network-1["region"]}"
+  region       = "${local.vpn-network-1["region"]}"
 }
 
 resource "google_compute_address" "vpn2" {
-  name = "vpn-2-static-ip"
+  name         = "vpn-2-static-ip"
   address_type = "EXTERNAL"
-  region = "${local.vpn-network-2["region"]}"
+  region       = "${local.vpn-network-2["region"]}"
 }
 
 resource "google_compute_vpn_gateway" "vpn1" {
@@ -49,9 +49,10 @@ resource "google_compute_forwarding_rule" "fr_esp" {
   ip_protocol = "ESP"
   ip_address  = "${google_compute_address.vpn1.address}"
   target      = "${google_compute_vpn_gateway.vpn1.self_link}"
-  region  = "${local.vpn-network-2["region"]}"
+  region      = "${local.vpn-network-2["region"]}"
+
   depends_on = [
-    "google_compute_address.vpn1"
+    "google_compute_address.vpn1",
   ]
 }
 
@@ -61,9 +62,10 @@ resource "google_compute_forwarding_rule" "fr_udp500" {
   port_range  = "500"
   ip_address  = "${google_compute_address.vpn1.address}"
   target      = "${google_compute_vpn_gateway.vpn1.self_link}"
-  region  = "${local.vpn-network-2["region"]}"
+  region      = "${local.vpn-network-2["region"]}"
+
   depends_on = [
-    "google_compute_address.vpn1"
+    "google_compute_address.vpn1",
   ]
 }
 
@@ -73,9 +75,10 @@ resource "google_compute_forwarding_rule" "fr_udp4500" {
   port_range  = "4500"
   ip_address  = "${google_compute_address.vpn1.address}"
   target      = "${google_compute_vpn_gateway.vpn1.self_link}"
-  region  = "${local.vpn-network-2["region"]}"
+  region      = "${local.vpn-network-2["region"]}"
+
   depends_on = [
-    "google_compute_address.vpn1"
+    "google_compute_address.vpn1",
   ]
 }
 
@@ -83,7 +86,7 @@ resource "google_compute_vpn_tunnel" "tunnel1" {
   name          = "tunnel1to2"
   peer_ip       = "${google_compute_address.vpn2.address}"
   shared_secret = "${var.shared_secret}"
-  region  = "${local.vpn-network-2["region"]}"
+  region        = "${local.vpn-network-2["region"]}"
 
   target_vpn_gateway = "${google_compute_vpn_gateway.vpn1.self_link}"
 
@@ -114,9 +117,10 @@ resource "google_compute_forwarding_rule" "fr_esp-2" {
   ip_protocol = "ESP"
   ip_address  = "${google_compute_address.vpn2.address}"
   target      = "${google_compute_vpn_gateway.vpn2.self_link}"
-  region  = "${local.vpn-network-2["region"]}"
+  region      = "${local.vpn-network-2["region"]}"
+
   depends_on = [
-    "google_compute_address.vpn2"
+    "google_compute_address.vpn2",
   ]
 }
 
@@ -126,9 +130,10 @@ resource "google_compute_forwarding_rule" "fr_udp500-2" {
   port_range  = "500"
   ip_address  = "${google_compute_address.vpn2.address}"
   target      = "${google_compute_vpn_gateway.vpn2.self_link}"
-  region  = "${local.vpn-network-2["region"]}"
+  region      = "${local.vpn-network-2["region"]}"
+
   depends_on = [
-    "google_compute_address.vpn2"
+    "google_compute_address.vpn2",
   ]
 }
 
@@ -138,17 +143,18 @@ resource "google_compute_forwarding_rule" "fr_udp4500-2" {
   port_range  = "4500"
   ip_address  = "${google_compute_address.vpn2.address}"
   target      = "${google_compute_vpn_gateway.vpn2.self_link}"
-  region  = "${local.vpn-network-2["region"]}"
+  region      = "${local.vpn-network-2["region"]}"
+
   depends_on = [
-    "google_compute_address.vpn2"
+    "google_compute_address.vpn2",
   ]
 }
 
 resource "google_compute_vpn_tunnel" "tunnel2" {
-  name          = "tunnel2to1"
-  peer_ip       = "${google_compute_address.vpn1.address}"
-  shared_secret = "${var.shared_secret}"
-  region  = "${local.vpn-network-2["region"]}"
+  name                   = "tunnel2to1"
+  peer_ip                = "${google_compute_address.vpn1.address}"
+  shared_secret          = "${var.shared_secret}"
+  region                 = "${local.vpn-network-2["region"]}"
   local_traffic_selector = ["${local.vpn-network-2["network"]}"]
 
   target_vpn_gateway = "${google_compute_vpn_gateway.vpn2.self_link}"

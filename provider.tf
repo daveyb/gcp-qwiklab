@@ -1,4 +1,3 @@
-provider "google" {
-}
+provider "google" {}
 
 provider "random" {}
